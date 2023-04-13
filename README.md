@@ -268,7 +268,7 @@ To modify the graphical aspect of the explorer, you will find the icons in the `
 
 #### 16. Support, Help.
 
-If you are looking for answers to some problems, you can find me on Discord ; nickname `Sheitak#3420` or with my GitHub.
+If you are looking for answers to some problems, you can find me on Discord ; nickname `Sheitak#6192` or with my GitHub.
 
 Or contact the creators of this template to explore in GitHub ; <a href="https://github.com/bulwark-crypto/bulwark-explorer">Bulwark</a>
 
