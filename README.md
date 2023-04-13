@@ -1,74 +1,74 @@
-Configuration d'un Explorer Blockchain
+Configuration of a Blockchain Explorer
 -
 
-__Je remercie <a href="https://github.com/samqju">Samqju</a> et ses collaborateurs, <a href="https://github.com/iquidus/explorer">Inquidus</a>, mon équipe du <a href="https://github.com/StakeShare">StakeShare</a>, ainsi que l'équipe du <a href="https://github.com/bulwark-crypto/bulwark-explorer">Bulwark</a> grâce à qui je construis ce nouveau guide. Merci également à tous les contributeurs du milieu Blockchain.__
+__I thank <a href="https://github.com/samqju">Samqju</a> and his collaborators, <a href="https://github.com/iquidus/explorer">Inquidus</a>, my old StakeShare team, and the <a href="https://github.com/bulwark-crypto/bulwark-explorer">Bulwark</a> team thanks to whom I am building this new guide. Thanks also to all the contributors of the Blockchain community.__
 
-Ce guide installe l'explorer d'un blockchain indépendante.
+This guide installs the exploration of an independent blockchain.
 
-__le nom de votre cryptomonnaie est içi remplacé par "examplecoin".__
+__The name of your cryptocurrency is replaced by "examplecoin".__
 
-Prérequis
+Requirements
 -
 
-- Pour suivre ce guide vous avez besoin d'un serveur ou bien d'un VPS possédant minimum 4Gb de RAM.
+- To follow this guide you need a server or a VPS with at least 4Gb of RAM..
 
-- Il est fortement préférable que votre serveur/VPS n'héberge QUE l'explorer Blockchain et rien d'autre.
+- It is strongly recommended that your server/VPS only hosts the Blockchain explorer and nothing else.
 
-- Configurez avec OS Linux Ubuntu 18.04.
+- Configure it with the Linux OS Ubuntu 18.04.
 
 ---
 
-1. Mise à jours du système Ubuntu.
+#### 1. Ubuntu system update.
 
 > `sudo sh -c 'apt update && apt upgrade -y'`
 
-2. Installation nécéssaire.
+#### 2. Installation required.
 
 > `sudo apt install git && htop && unzip`
 
-Installation de Nodejs et npm. Installer d'abord <a href="https://github.com/nvm-sh/nvm">Node Version Manager (nvm)</a> pour être certain d'obtenir des versions compatibles.
+Installation of Nodejs and npm. First install <a href="https://github.com/nvm-sh/nvm">Node Version Manager (nvm)</a> to be sure to get compatible versions.
 
 > `nvm install node`
 
-(supp)Installation de yarn
+(supp) Installation of yarn.
 
 > `sudo apt install yarn`
 
-3. Liste des packages pour la compilation de la blockchain.
+#### 3. List of packages for the compilation of the blockchain.
 
-_Note. Certaines de ces librairies ne sont pas indispensables, cependant leurs utilitées varies en fonction de votre cryptomonnaie, il est donc judicieux de toutes les installers._
+_Note. Some of these libraries are not essential, however their usefulness varies depending on your cryptocurrency, so it is wise to install them all._
 
 > `sudo apt install build-essential libdb++-dev libqrencode-dev miniupnpc libminiupnpc-dev autoconf pkg-config libtool autotools-dev libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev libevent-dev libboost-all-dev libgtk2.0-dev bsdmainutils python3 libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-test-dev libboost-thread-dev libboost-program-options-dev libzmq3-dev libkrb5-dev protobuf-compiler software-properties-common libdb4.8-dev libdb4.8++-dev libssl-dev libssl1.0-dev automake -y`
 
-Erreur : Il est possible que l'installation des librairies bloque, car certaines d'entre-elles ont besoin d'autres packages d'installation pour s'éxécuter. Si cela vous arrive, observez le nom des packages en causes dans votre script, retirez-les de la commande, puis exécuter de nouveau.
+Error : It is possible that the installation of the libraries blocks, because some of them need other installation packages to run. If this happens to you, look at the names of the packages involved in your script, remove them from the command, then run it again.
 
-Installer les packages retirés juste avant le point 4, ou bien, juste avant le script `.autogen` du point 4. Faite le de façon individuel en suivant ce schéma de lignes :
+Install the removed packages just before point 4, or else, just before the `.autogen` script of point 4. Do it individually following this line pattern :
 
 > `sudo apt install <nom du package>`
 
-Berkeley DB 
+Berkeley DB.
 
 > `sudo add-apt-repository ppa:bitcoin/bitcoin`
 
 > `sudo apt update`
 
-4. Compilation et Configuration du daemon
+#### 4. Compilation and Configuration of the daemon.
 
-Télécharger le répertoire de votre cryptomonnaie.
+Download the directory of your cryptocurrency.
 
 > `git clone https://github.com/examplecoin/examplecoin-core`
 
-Placez-vous à l'intérieur.
+Stand inside.
 
 > `cd examplecoin-x.x.x`
 
-Lancez le script de compilation du daemon.
+Run the daemon build script.
 
 > `./autogen.sh && ./configure --with-gui=no --disable-tests --with-unsupported-ssl --with-libressl --with-incompatible-bdb && make`
 
-5. Strip ! Et configuration RPC.
+#### 5. Strip ! And RPC configuration.
 
-Placez-vous à l'intérieur du dossier caché `.examplecoin` nouvellement généré, puis créer le fichier examplecoin.conf en suivant le schéma ci-dessous.
+Go inside the newly generated `.examplecoin` hidden folder, and create the `examplecoin.conf` file following the outline below.
 
 > `nano examplecoin.conf`
 
@@ -80,24 +80,24 @@ daemon=1
 server=1
 staking=0
 txindex=1
-rpcport=XXXXXX (Utilisez ici le port RPC de votre cryptomonnaie)
+rpcport=XXXXXX (Use the RPC port of your cryptocurrency here)
 ```
 
-Enregistrer, puis placez-vous dans le dossier src : `cd examplecoin-core/src`
+Save, then move to the src folder : `cd examplecoin-core/src`
 
-Effectuez un strip. Cette manipulation vous permettras d'intéragir avec le daemon où que vous soyez dans l'architecture.
+Make a strip. This manipulation will allow you to interact with the daemon wherever you are in the architecture.
 
 > `strip stakeshared stakeshare-cli`
 
-Puis,
+Then,
 
 > `mkdir ~/ssx && mv stakeshared stakeshare-cli ~/ssx/`
 
-Lancer le daemon,
+Start the daemon,
 
 > `~/ssx/stakeshared -daemon`
 
-Voici les trois commandes importantes. Vous pouvez à présent les lancers à n'importe quel moments. Lancer, arréter le daemon, le getinfo vous permet de voir si la blockchain se synchronise correctement.
+These are the three important commands. You can now run them at any time. Start, stop the daemon, the getinfo allows you to see if the blockchain is synchronizing correctly.
 
 ```
 ~/ssx/stakeshared -daemon
@@ -105,17 +105,17 @@ Voici les trois commandes importantes. Vous pouvez à présent les lancers à n'
 ~/ssx/stakeshare-cli getinfo
 ```
 
-Si à ce stade, vous constatez à l'aide du `getinfo` que le nombre de block ne bouge pas au bout de quelques minutes, alors cela signifie que le daemon ne parviens pas à s'indexer. Stopper-le.
+If at this point you notice with the `getinfo` that the number of blocks does not move after a few minutes, then it means that the daemon is not able to index itself. Stop it.
 
-Vous devez, si votre blockchain est importante, télécharger un bootstrap (le plus récent possible) de la chaîne sur votre serveur/VPS et remplacer les fichier/dossier `peer.dat , chainstate et block`, se trouvant à l'intérieur du dossier caché `.examplecoin`
+You should, if your blockchain is important, download a bootstrap (as recent as possible) of the chain to your server/VPS and replace the `peer.dat, chainstate and block` files/folder inside the hidden `.examplecoin` folder.
 
-Relancer le daemon.
+Restart the daemon.
 
-Si cela ne fonctionne toujours pas, après plusieurs manipulation et test, alors vous devez probablement recommencer ce tutoriel. Le daemon doit-être synchroniser avant de poursuivre.
+If it still doesn't work, after several manipulations and tests, then you probably need to restart this tutorial. The daemon must be synchronized before continuing.
 
-6. Créer l'utilisateur Explorer.
+#### 6. Create the user explorer.
 
-Entrer les lignes suivantes une par une.
+Enter the following lines one by one.
 
 > `adduser explorer`
 
@@ -123,17 +123,17 @@ Entrer les lignes suivantes une par une.
 
 > `su explorer`
 
-7. Installation facile de l'explorer
+#### 7. Easy installation of explorer.
 
 > `bash <( curl https://raw.githubusercontent.com/bulwark-crypto/bulwark-explorer/master/script/install.sh )`
 
-8. Configuration de vos informations
+#### 8. Configuration of your information.
 
-Assurez-vous que `config.js` et `config.server.js` correspondent bien aux informations de votre cryptomonnaie, similaire aux informations de `examplecoin.conf` du point 5.
+Make sure `config.js` and `config.server.js` match your cryptocurrency information, similar to the `examplecoin.conf` information in point 5.
 
-Egalement, `config.js` doit avoir le nom de host correct propre à votre serveur/VPS. Prenez note du port. Récemment, CoinMarketCap a modifié son API, ainsi il est compliqué pour BlockEx de récupérer les données qui ne sont plus sur le même modèle.
+Also, `config.js` must have the correct host name specific to your server/VPS. Take note of the port. Recently, CoinMarketCap changed their API, so it is complicated for BlockEx to retrieve data that is no longer on the same model.
 
-Utilisez l'API de CoinGecko et modifier la ligne approprié dans `config.js`
+Use the CoinGecko API and modify the appropriate line in `config.js`.
 
 ```
   coinMarketCap: {
@@ -141,35 +141,35 @@ Utilisez l'API de CoinGecko et modifier la ligne approprié dans `config.js`
 	ticker: 'examplecoin'
 ```
 
-9. Configurer MongoDB
+#### 9. Configure MongoDB.
 
 > `mongo`
 
 > `use blockex`
 
-Utilisez les même informations que dans `config.js`
+Use the same information as in `config.js`.
 
 > `db.createUser( { user: "blockexuser", pwd: "Explorer!1", roles: [ "readWrite" ] } )`
 
 > `exit`
 
-10. Synchroniser tous les block avec l'Explorer.
+#### 10. Synchronize all blocks with the Explorer.
 
 > `tail -f /home/explorer/blockex/tmp/block.log`
 
-Cela peut prendre assez longtemps en fonction de la taille de votre blockchain.
+This can take quite a long time depending on the size of your blockchain.
 
-11. Crontab
+#### 11. Crontab.
 
-Les commandes suivantes sont nécéssaire pour que BlockEx se mette à jours perpetuellement. En effet, la Crontab permet de planifier des tâches automatisées. Nous allons donc l'utiliser pour mettre à jours l'explorer afin qu'il soit toujours en accords avec les données de la blockchain.
+The following commands are necessary for BlockEx to update itself continuously. Indeed, the Crontab allows to schedule automated tasks. We will use it to update the explorer so that it is always in agreement with the data of the blockchain.
 
-Avant toute choses, vous devez mettre à jours le fichier `crontab`, ouvrez-le en suivant ce chemin : `/home/explorer/crontab`
+First of all, you have to update the `crontab` file, open it following this path : `/home/explorer/crontab`.
 
-Modifier pour y intégrer le modèle suivant.
+Modify it to include the following template.
 
-Vérifiez path `node` ou `nodejs` pour `/usr/bin/nodejs`
+Check path node or nodejs for `/usr/bin/nodejs`.
 
-Vérifiez le path correcte pour `/home/explorer/blockex`
+Check the correct path for `/home/explorer/blockex`.
 
 ``` bash
 # /etc/crontab: system-wide crontab
@@ -192,15 +192,14 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 */1 * * * * cd /home/explorer/blockex && /usr/bin/nodejs ./cron/rich.js >> ./tmp/rich.log 2>&1
 */5 * * * * cd /home/explorer/blockex && /usr/bin/nodejs ./cron/coin.js >> ./tmp/coin.log 2>&1
 0 0 * * * cd /home/explorer/blockex && /usr/bin/nodejs ./cron/timeIntervals.js >> ./tmp/timeIntervals.log 2>&1
-
 #
 ```
 
-12. Synchronisation
+#### 12. Synchronization.
 
-Avant de commencer la synchronisation, rendez-vous dans `/home/explorer/blockex/cron`
+Before starting the synchronization, go to `/home/explorer/blockex/cron`.
 
-Ouvrez `coin.js` et modifier les informations pour correspondre à celles ci-dessous. Cela permet à l'API de CoinGecko de récupérer les bonnes informations existantes étant donné que nous l'avons changé au point 8.
+Open `coin.js` and change the information to match the one below. This allows the CoinGecko API to retrieve the correct existing information since we changed it in point 8.
 
 ```
 const coin = new Coin({
@@ -220,66 +219,66 @@ const coin = new Coin({
     countCarverMovements
   });
 ```
-Il est important que vous récupériez les bonnes informations json. Si vous avez des doutes ou si `yarn run cron:coin` ne fonctionne pas, veillez à vérifier les informatiosn de votre pièce sur l'api coingecko et suivez le schéma du json en fonction de l'érreur indiqué par la commande yarn.
 
-Entrer les commandes suivantes.
+It is important that you get the correct json information. If you have any doubts or if `yarn run cron:coin` does not work, be sure to check your part information on the coingecko api and follow the json scheme according to the error indicated by the yarn command.
 
-`yarn run cron:coin` : Récupérera les informations relatives aux pièces comme le prix et l'approvisionnement.
+Enter the following commands.
 
-`yarn run cron:masternode` - Met à jour la liste des masternodes dans la base de données avec les informations les plus récentes effaçant les anciennes informations auparavant.
+`yarn run cron:coin` : Will retrieve part information like price and supply.
 
-`yarn run cron:peer` - Rassemble la liste des pairs et récupére les informations géographiques IP.
+`yarn run cron:masternode` - Updates the list of masternodes in the database with the most recent information deleting the old information before.
 
-`yarn run cron:block` - Synchronisera les blocs et les transactions en les stockants dans la base de données.
+`yarn run cron:peer` - Gathers the list of peers and retrieves geographic IP information.
 
-`yarn run cron:rich` - Génére la Rich list.
+`yarn run cron:block` - Synchronize blocks and transactions by storing them in the database.
 
-13. Exécution de l'Explorer
+`yarn run cron:rich` - Generates the rich list.
 
-Créez l'interface Web du client à l'aide de webpack. Exécutez,
+#### 13. Running the Explorer.
+
+Create the client's web interface using webpack. Run it,
 
 `yarn run build:web`
 
-Démarrage API
+API Start up.
 
 > `yarn run start:api`
 
-Démarrage dans le navigateur
+Start up in the browser.
 
 > `yarn run start:web`
 
-Félicitation ! Votre Explorer est à présent fonctionnel et en ligne à l'adresse : {IP-de-votre-serveur}:3000
+Congratulations ! Your Explorer is now functional and online at : __{IP-of-your-server}:3000__
 
+#### 14. Test.
 
-14. Tester
-
-Execute des tests côté client.
+Performs client-side tests.
 
 > `yarn run start:api`
 
-Execute des tests de connexion rpc, la connexion à la base de données et les points finaux api. 
+Performs rpc connection tests, database connection and api endpoints.
 
 > `yarn run start:web`
 
 ---
 
-15. Modification Graphique.
+#### 15. Graphic modification.
 
-Pour modifier l'aspect graphique de l'explorer, vous trouverez les icons dans le dossier `public` et les intéractions à modifier du front dans les `components` ou les `containers`
+To modify the graphical aspect of the explorer, you will find the icons in the `public` folder and the interactions to modify from the front in the `components` or `containers`.
 
-16. Soutien, Help.
+#### 16. Support, Help.
 
-Si vous cherchez des réponses à certains problèmes, vous pouvez me retrouver sur le <a href="https://discord.gg/sjhpWsS">Discord de StakeShare</a> ; pseudo `Sheitak#3420`
+If you are looking for answers to some problems, you can find me on Discord ; nickname `Sheitak#3420` or with my GitHub.
 
-Ou contacter les créateurs de ce modèle d'explorer ici ; <a href="https://discord.gg/EjhT4Ju">Bulwark Discord</a>
+Or contact the creators of this template to explore in GitHub ; <a href="https://github.com/bulwark-crypto/bulwark-explorer">Bulwark</a>
 
 ---
 
-Merci beaucoup d'avoir suivis ce tutoriel et au plaisir de voir votre explorer disponible sur le web prochainement,
+Thank you very much for following this tutorial and I look forward to seeing your explorer available on the web soon.
 
-Réalisé avec amour par StakeShare Team.
+Made with love by @Sheitak ♥
 
-17. Liens utiles.
+#### 17. Useful links.
 
 - <a href="https://gist.github.com/samqju/b9fc6c007f083e6429387051e24da1c3">Samqju Tutorial</a>
 - <a href="https://github.com/iquidus/explorer">Inquidus</a>
